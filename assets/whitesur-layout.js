@@ -47,14 +47,23 @@ if (panel.formFactor === "horizontal") {
 // macOS-style menu bar : system menu (Apple equivalent), bold active
 // app name with window actions, then the global menu (File/Edit/…).
 //
-// The systemmenu icon is overridden to pomstyle-launcher-nixos (the
-// NixOS snowflake shipped by echo-pom-style.nix under share/icons/
-// hicolor/scalable/apps/). The default would be pomstyle-launcher-
-// white (the `>_` squircle) which is also nice but doesn't read as
-// "this is a NixOS desktop" — we'd rather brand the menu-bar slot.
+// The systemmenu icon is overridden to `start-here`, the standard
+// distributor-icon name. WhiteSur-icon-theme-flake patches that name
+// to a NixOS snowflake in every variant, with the right colour per
+// theme :
+//   WhiteSur, WhiteSur-light → dark-fill snowflake (#363636), reads on light
+//   WhiteSur-dark            → white-fill snowflake (#FFFFFF), reads on dark
+// This way the icon auto-adapts when the user toggles between WhiteSur
+// variants — no need to writeConfig a different value per variant.
+//
+// We don't use pomstyle-launcher-nixos (the hicolor copy shipped by
+// echo-pom-style.nix) because hicolor only ships one fill — the
+// snowflake would stay readable on the variant matching that fill and
+// invisible on the opposite. The icon-theme-resolved start-here gives
+// us the per-variant tinting for free.
 var sysmenu = panel.addWidget("org.scelles.systemmenu")
 sysmenu.currentConfigGroup = ["General"]
-sysmenu.writeConfig("iconName", "pomstyle-launcher-nixos")
+sysmenu.writeConfig("iconName", "start-here")
 sysmenu.reloadConfig()
 panel.addWidget("org.scelles.appname")
 
