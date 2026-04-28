@@ -46,7 +46,16 @@ if (panel.formFactor === "horizontal") {
 
 // macOS-style menu bar : system menu (Apple equivalent), bold active
 // app name with window actions, then the global menu (File/Edit/…).
-panel.addWidget("org.scelles.systemmenu")
+//
+// The systemmenu icon is overridden to pomstyle-launcher-nixos (the
+// NixOS snowflake shipped by echo-pom-style.nix under share/icons/
+// hicolor/scalable/apps/). The default would be pomstyle-launcher-
+// white (the `>_` squircle) which is also nice but doesn't read as
+// "this is a NixOS desktop" — we'd rather brand the menu-bar slot.
+var sysmenu = panel.addWidget("org.scelles.systemmenu")
+sysmenu.currentConfigGroup = ["General"]
+sysmenu.writeConfig("iconName", "pomstyle-launcher-nixos")
+sysmenu.reloadConfig()
 panel.addWidget("org.scelles.appname")
 
 var bpanel = new Panel
