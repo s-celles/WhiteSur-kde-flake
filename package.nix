@@ -27,17 +27,33 @@ stdenvNoCC.mkDerivation {
 
   # Replace upstream's Apple-logo `start.svg` (the Plasma desktoptheme
   # kicker icon used by org.kde.plasma.kickoff and friends) with the
-  # NixOS snowflake from ./assets/. Same `fill="currentColor"` contract,
-  # so KDE's panel theme keeps tinting it in line with light/dark mode.
-  # Override BOTH copies upstream ships : `icons/` (the canonical one)
-  # and `icons-old/` (kept for backwards-compat). Each desktop theme
-  # variant (WhiteSur, WhiteSur-alt, WhiteSur-dark) inherits from this
-  # shared `icons/` dir via the desktoptheme fallback chain — no need
-  # to override the per-variant copies.
+  # NixOS snowflake from ./assets/.
+  #
+  # Two variants of the snowflake :
+  #   - start-nixos.svg       — solid dark fill (#363636), for light panels
+  #   - start-nixos-white.svg — solid white fill (#ffffff), for dark panels
+  # We can't use a single `currentColor` SVG because KDE doesn't inherit
+  # a sensible text colour into kicker icons across panel themes (the
+  # panel is a Containment, not a Text context).
+  #
+  # postPatch overrides the source's shared `icons/start.svg` with the
+  # dark-fill (light-theme) copy. install_plasma() in upstream's
+  # install.sh then runs `cp -r {icons,weather} $PLASMA_DIR/$variant/`
+  # for every variant, so all 3 dirs (WhiteSur, WhiteSur-alt,
+  # WhiteSur-dark) initially get the dark-fill copy. postInstall then
+  # specifically overwrites WhiteSur-dark/icons/start.svg with the
+  # white-fill version, so the dark Plasma theme reads as white-on-dark.
   postPatch = ''
     cp ${./assets/start-nixos.svg} plasma/desktoptheme/icons/start.svg
     if [ -f plasma/desktoptheme/icons-old/start.svg ]; then
       cp ${./assets/start-nixos.svg} plasma/desktoptheme/icons-old/start.svg
+    fi
+  '';
+
+  postInstall = ''
+    if [ -f $out/share/plasma/desktoptheme/WhiteSur-dark/icons/start.svg ]; then
+      cp ${./assets/start-nixos-white.svg} \
+        $out/share/plasma/desktoptheme/WhiteSur-dark/icons/start.svg
     fi
   '';
 
