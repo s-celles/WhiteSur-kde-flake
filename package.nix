@@ -48,6 +48,21 @@ stdenvNoCC.mkDerivation {
     if [ -f plasma/desktoptheme/icons-old/start.svg ]; then
       cp ${./assets/start-nixos.svg} plasma/desktoptheme/icons-old/start.svg
     fi
+
+    # Patch the LAF layout JS to mirror macOS menu-bar behaviour :
+    # replace kickoff (just an app launcher) with org.scelles.systemmenu
+    # (Apple-menu equivalent), and add org.scelles.appname (bold active
+    # app name with Hide/Quit menu) before the upstream appmenu.
+    # All three LAF variants ship the same layout, so we copy our
+    # custom layout to each.
+    for laf in com.github.vinceliuice.WhiteSur \
+               com.github.vinceliuice.WhiteSur-alt \
+               com.github.vinceliuice.WhiteSur-dark; do
+      target="plasma/look-and-feel/$laf/contents/layouts/org.kde.plasma.desktop-layout.js"
+      if [ -f "$target" ]; then
+        cp ${./assets/whitesur-layout.js} "$target"
+      fi
+    done
   '';
 
   postInstall = ''
