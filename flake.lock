@@ -1,0 +1,45 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1777268161,
+        "narHash": "sha256-bxrdOn8SCOv8tN4JbTF/TXq7kjo9ag4M+C8yzzIRYbE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1c3fe55ad329cbcb28471bb30f05c9827f724c76",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "whitesur-kde-src": "whitesur-kde-src"
+      }
+    },
+    "whitesur-kde-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1766802076,
+        "narHash": "sha256-t0bCb1X6BprttUUEcfVqjLskulbFxwXQwUMBn6p8Ho8=",
+        "owner": "vinceliuice",
+        "repo": "WhiteSur-kde",
+        "rev": "1e4d960945572d05a3d96bec5253dd83971239f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vinceliuice",
+        "repo": "WhiteSur-kde",
+        "rev": "1e4d960945572d05a3d96bec5253dd83971239f2",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
