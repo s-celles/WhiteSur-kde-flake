@@ -25,6 +25,22 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
+  # Replace upstream's Apple-logo `start.svg` (the Plasma desktoptheme
+  # kicker icon used by org.kde.plasma.kickoff and friends) with the
+  # NixOS snowflake from ./assets/. Same `fill="currentColor"` contract,
+  # so KDE's panel theme keeps tinting it in line with light/dark mode.
+  # Override BOTH copies upstream ships : `icons/` (the canonical one)
+  # and `icons-old/` (kept for backwards-compat). Each desktop theme
+  # variant (WhiteSur, WhiteSur-alt, WhiteSur-dark) inherits from this
+  # shared `icons/` dir via the desktoptheme fallback chain — no need
+  # to override the per-variant copies.
+  postPatch = ''
+    cp ${./assets/start-nixos.svg} plasma/desktoptheme/icons/start.svg
+    if [ -f plasma/desktoptheme/icons-old/start.svg ]; then
+      cp ${./assets/start-nixos.svg} plasma/desktoptheme/icons-old/start.svg
+    fi
+  '';
+
   installPhase = ''
     runHook preInstall
 
