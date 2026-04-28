@@ -72,6 +72,20 @@ taskBar.writeConfig("launchers", [
     "applications:org.kde.konsole.desktop",
     "applications:systemsettings.desktop",
 ])
+// Running-task display : without these, Plasma's defaults can hide
+// running apps that aren't pinned launchers (per-desktop filter, per-
+// activity filter) or fold them under a single icon (groupingStrategy
+// 1 or 2). The macOS dock shows every open app inline regardless of
+// desktop/activity, so we mirror that.
+taskBar.writeConfig("showOnlyCurrentDesktop", false)
+taskBar.writeConfig("showOnlyCurrentActivity", false)
+taskBar.writeConfig("groupingStrategy", 0)
+// Audio indicator (small speaker icon under apps that play sound),
+// matches macOS Sonoma's now-playing dot. The "running" indicator
+// (small bar / dot under each open app) is part of the icontasks
+// visual style and doesn't need a separate config key.
+taskBar.writeConfig("indicateAudioStreams", true)
+taskBar.reloadConfig()
 panel.addWidget("org.kde.plasma.appmenu")
 panel.addWidget("org.kde.plasma.panelspacer")
 panel.addWidget("org.kde.plasma.marginsseparator")
