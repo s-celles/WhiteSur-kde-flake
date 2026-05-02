@@ -38,7 +38,7 @@
       # variant; it does not enforce one.
       nixosModules.default = { pkgs, ... }: {
         environment.systemPackages = [
-          self.packages.${pkgs.system}.whitesur-kde
+          self.packages.${pkgs.stdenv.hostPlatform.system}.whitesur-kde
         ];
       };
     };
